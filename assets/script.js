@@ -1,32 +1,64 @@
 const slides = [
 	{
-		"image":"slide1.jpg",
+		"image":"assets/images/slideshow/slide1.jpg",
 		"tagLine":"Impressions tous formats <span>en boutique et en ligne</span>"
 	},
 	{
-		"image":"slide2.jpg",
+		"image":"assets/images/slideshow/slide2.jpg",
 		"tagLine":"Tirages haute définition grand format <span>pour vos bureaux et events</span>"
 	},
 	{
-		"image":"slide3.jpg",
+		"image":"assets/images/slideshow/slide3.jpg",
 		"tagLine":"Grand choix de couleurs <span>de CMJN aux pantones</span>"
 	},
 	{
-		"image":"slide4.png",
+		"image":"assets/images/slideshow/slide4.png",
 		"tagLine":"Autocollants <span>avec découpe laser sur mesure</span>"
 	}
-]
+];
 
-const arrow = document.querySelectorAll(".arrow");
-arrow.forEach((arrow,index) => {
-	arrow.addEventListener("click", () => {
-		switch (index) {
-			case 0:
-				console.log("à gauche");
-				break;
-			case 1:
-				console.log("à droite");
-				break;
-		}
+const imageElement = document.querySelector(".banner-img");
+const tagLineElement = document.querySelector("#banner p");
+const prev = document.querySelector(".arrow_left");
+const next = document.querySelector(".arrow_right");
+const dots = document.querySelectorAll(".dot");
+
+let currentSlide = 0;
+
+function showSlide(slideIndex) {
+	const slide = slides[slideIndex];
+	imageElement.src = slide.image;
+	tagLineElement.innerHTML = slide.tagLine;
+}
+
+function updateDots(slideIndex) {
+	dots.forEach(dot => dot.classList.remove("dot_selected"));
+	dots[slideIndex].classList.add("dot_selected");
+}
+
+prev.addEventListener("click", () => {
+	currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+	showSlide(currentSlide);
+	updateDots(currentSlide);
+});
+
+next.addEventListener("click", () => {
+	currentSlide = (currentSlide + 1) % slides.length;
+	showSlide(currentSlide);
+	updateDots(currentSlide);
+});
+
+dots.forEach((dot, index) => {
+	dot.addEventListener("click", () => {
+		currentSlide = index;
+		showSlide(currentSlide);
+		updateDots(currentSlide);
 	});
 });
+
+showSlide(currentSlide);
+updateDots(currentSlide);
+
+const divBanner = document.querySelector("#banner");
+divBanner.appendChild(imageElement);
+divBanner.appendChild(tagLineElement);
